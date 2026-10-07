@@ -1,0 +1,49 @@
+{
+  "name": "nft-metadata-check",
+  "version": "1.0.0",
+  "description": "NFT metadata check: reads the metadata folder of an NFT collection before it is minted (one JSON file for each token, named for its id) and an optional collection config (the standard, ERC-721, ERC-1155 or Metaplex Token Metadata, the range of token ids, the base URI and the media folder), contacts no IPFS node, chain or web server, fetches nothing, runs nothing and reads no clock, and lists with file and line what breaks marketplaces and wallets: a token with no name, image or description, fields of the wrong type, attributes that are not a list of trait_type and value, ERC-1155 file names and placeholders not in the lowercase 64 hex form of {id}, ids missing, written twice, outside the range or with gaps, images on a web address, a local path or an unknown scheme, large data URIs, media missing from the media folder, names and sets of attributes written twice, empty attributes, traits written two ways, files that are not UTF-8 or not JSON, and keys or seeds left in a file. Text, markdown, JSON and SARIF output, exit codes for a pipeline, no dependencies.",
+  "type": "module",
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "bin": {
+    "nft-metadata-check": "bin/nft-metadata-check.js"
+  },
+  "files": [
+    "bin",
+    "src",
+    "docs",
+    "examples",
+    "research",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node --test \"test/*.test.js\"",
+    "test:coverage": "node --test --experimental-test-coverage \"test/*.test.js\"",
+    "check": "node tools/check.mjs",
+    "example": "node tools/example.mjs"
+  },
+  "keywords": [
+    "nft",
+    "erc-721",
+    "erc-1155",
+    "metaplex",
+    "metadata",
+    "ipfs",
+    "static-analysis",
+    "sarif",
+    "cli"
+  ],
+  "author": "INNERLUXES <info@innerluxes.dev>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/INNERLUXES/nft-metadata-check.git"
+  },
+  "homepage": "https://innerluxes.dev/blockchain/nft-development"
+}
