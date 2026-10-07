@@ -1,0 +1,1307 @@
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "nft-metadata-check",
+          "version": "1.0.0",
+          "informationUri": "https://github.com/INNERLUXES/nft-metadata-check",
+          "rules": [
+            {
+              "id": "file-unreadable",
+              "name": "file-unreadable",
+              "shortDescription": {
+                "text": "a metadata file or the collection config is not text the tool can read (not UTF-8, a null byte, too large, a link) or not strict JSON, or its top level is not an object, so nothing in it was checked"
+              },
+              "help": {
+                "text": "Write each file as one JSON object in UTF-8 (docs/inputs.md); fix the line named. (input)"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "kind": "input"
+              }
+            },
+            {
+              "id": "field-unknown",
+              "name": "field-unknown",
+              "shortDescription": {
+                "text": "a key of the config the tool does not read, or a key of a metadata file or an attribute that differs from a field of the standard only in case or separators, such as Image or traitType; its value was left out of every check"
+              },
+              "help": {
+                "text": "Write the key as the standard spells it (docs/inputs.md), or remove it. (input)"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "kind": "input"
+              }
+            },
+            {
+              "id": "field-invalid",
+              "name": "field-invalid",
+              "shortDescription": {
+                "text": "a value of the config of the wrong type or form: a standard the tool does not know, token ids that are not whole numbers from first to last, a base URI or a media folder that is not text"
+              },
+              "help": {
+                "text": "Write the value as docs/inputs.md shows. (input)"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "kind": "input"
+              }
+            },
+            {
+              "id": "secret-in-file",
+              "name": "secret-in-file",
+              "shortDescription": {
+                "text": "a file holds a private key, a seed or a mnemonic, under a key named for one or as a value shaped like one; the tool never reads it and never shows it"
+              },
+              "help": {
+                "text": "Remove the value from the file and from wherever the file was copied, treat it as exposed and move what it controls to a new key. Metadata is public once it is uploaded. (input)"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "kind": "input"
+              }
+            },
+            {
+              "id": "metadata-field-missing",
+              "name": "metadata-field-missing",
+              "shortDescription": {
+                "text": "a token has no name or no image, or one that is empty, though the metadata schema of its standard defines both"
+              },
+              "help": {
+                "text": "Give every token a name and an image, as text. (documented)"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "kind": "documented"
+              }
+            },
+            {
+              "id": "description-missing",
+              "name": "description-missing",
+              "shortDescription": {
+                "text": "a token has no description, or one that is empty, though the metadata schema of its standard defines it"
+              },
+              "help": {
+                "text": "Give every token a description, as text. (documented)"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "kind": "documented"
+              }
+            },
+            {
+              "id": "field-type",
+              "name": "field-type",
+              "shortDescription": {
+                "text": "a field the schema of the standard defines has the wrong type: a name, description or image that is not text, an ERC-1155 decimals that is not a whole number or properties that are not an object, or in Metaplex attributes that are not a list of objects with a trait_type and a value, properties.files that are not a list of objects with a uri and a type, or an animation_url, external_url or category that is not text"
+              },
+              "help": {
+                "text": "Write the field in the type the standard gives it (docs/inputs.md). (documented)"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "kind": "documented"
+              }
+            },
+            {
+              "id": "id-hex-form",
+              "name": "id-hex-form",
+              "shortDescription": {
+                "text": "in an ERC-1155 collection, a file name that is an id but not in the form clients put in place of {id}: 64 hex digits in small letters with no 0x, filled with zeros on the left"
+              },
+              "help": {
+                "text": "Name the file for its id as 64 small hex digits, such as 0000000000000000000000000000000000000000000000000000000000000001.json for id 1. (documented)"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "kind": "documented"
+              }
+            },
+            {
+              "id": "uri-id-substitution",
+              "name": "uri-id-substitution",
+              "shortDescription": {
+                "text": "in an ERC-1155 collection, a base URI with no {id}, or a URI with a placeholder in braces other than the exact {id}, such as {ID} or {tokenId}, which no client replaces"
+              },
+              "help": {
+                "text": "Write the placeholder as {id}, in small letters with no space, and put it in the base URI where the id goes. (documented)"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "kind": "documented"
+              }
+            },
+            {
+              "id": "attributes-invalid",
+              "name": "attributes-invalid",
+              "shortDescription": {
+                "text": "in an ERC-721 or ERC-1155 collection, attributes that are not a list of objects, each with a trait_type as text and a value as text or a number"
+              },
+              "help": {
+                "text": "Write attributes as a list such as [{\"trait_type\": \"Background\", \"value\": \"Blue\"}]. (best practice)"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "kind": "best practice"
+              }
+            },
+            {
+              "id": "file-name-unexpected",
+              "name": "file-name-unexpected",
+              "shortDescription": {
+                "text": "a metadata file whose name is not the plain id the base URI leads to: zeros in front of a decimal id, 64 hex digits in an ERC-721 or Metaplex collection, an extension in capitals, or a name that is no id at all"
+              },
+              "help": {
+                "text": "Name each file for its id as the base URI builds it, such as 1.json or 1, with .json in small letters. (best practice)"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "kind": "best practice"
+              }
+            },
+            {
+              "id": "id-out-of-range",
+              "name": "id-out-of-range",
+              "shortDescription": {
+                "text": "a token id outside the range tokenIds of the config, or above the largest uint256"
+              },
+              "help": {
+                "text": "Remove the file, or correct its name or the range of the config. (best practice)"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "kind": "best practice"
+              }
+            },
+            {
+              "id": "id-missing",
+              "name": "id-missing",
+              "shortDescription": {
+                "text": "an id inside the range tokenIds of the config has no metadata file, so the token minted with it has no metadata"
+              },
+              "help": {
+                "text": "Add the missing files, or narrow the range of the config to the ids that will be minted. (best practice)"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "kind": "best practice"
+              }
+            },
+            {
+              "id": "id-gap",
+              "name": "id-gap",
+              "shortDescription": {
+                "text": "with no range in the config, ids missing between the lowest and the highest id of the files"
+              },
+              "help": {
+                "text": "Add the missing files, or give the range of ids in the config (tokenIds) when the gap is meant. (best practice)"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "kind": "best practice"
+              }
+            },
+            {
+              "id": "id-duplicate",
+              "name": "id-duplicate",
+              "shortDescription": {
+                "text": "two files are for the same id, such as 1.json and 01.json, or 1 and 1.json, so which one is served depends on the server"
+              },
+              "help": {
+                "text": "Keep one file for each id. (best practice)"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "kind": "best practice"
+              }
+            },
+            {
+              "id": "base-uri-no-slash",
+              "name": "base-uri-no-slash",
+              "shortDescription": {
+                "text": "in an ERC-721 collection, a base URI with no {id} that does not end in /, so the base URI and the id run together, as in ipfs://cid1 for ipfs://cid/1"
+              },
+              "help": {
+                "text": "End the base URI with /. (best practice)"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "kind": "best practice"
+              }
+            },
+            {
+              "id": "uri-mutable",
+              "name": "uri-mutable",
+              "shortDescription": {
+                "text": "an image, animation_url, file uri or base URI on http: or https:, which whoever runs the server can change or take down after the mint; http: is also not encrypted"
+              },
+              "help": {
+                "text": "Upload the media and the metadata to a content address, such as ipfs:// or ar://, and point at that. (best practice)"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "kind": "best practice"
+              }
+            },
+            {
+              "id": "uri-local-path",
+              "name": "uri-local-path",
+              "shortDescription": {
+                "text": "an image, animation_url, file uri or base URI that is a path on the machine that built the files: a file: URI, an absolute path, a drive letter, a backslash, a ~ or a .. that leaves the media folder"
+              },
+              "help": {
+                "text": "Point at the uploaded file, or at a path inside the media folder that the upload tool replaces. (best practice)"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "kind": "best practice"
+              }
+            },
+            {
+              "id": "uri-scheme-unknown",
+              "name": "uri-scheme-unknown",
+              "shortDescription": {
+                "text": "an image, animation_url, file uri or base URI with a scheme the tool does not know (it knows ipfs:, ar:, https:, http: and data:), or a base URI with no scheme"
+              },
+              "help": {
+                "text": "Use ipfs://, ar:// or https://, or check that the wallets and marketplaces of the collection read the scheme. (best practice)"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "kind": "best practice"
+              }
+            },
+            {
+              "id": "uri-data-large",
+              "name": "uri-data-large",
+              "shortDescription": {
+                "text": "a data: URI longer than 65,536 characters in an image, animation_url or file uri"
+              },
+              "help": {
+                "text": "Upload the media and point at it, or make the data smaller. (best practice)"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "kind": "best practice"
+              }
+            },
+            {
+              "id": "media-missing",
+              "name": "media-missing",
+              "shortDescription": {
+                "text": "an image, animation_url or file uri that is a relative path with no file of that name in the media folder (names are compared with their case)"
+              },
+              "help": {
+                "text": "Add the file to the media folder, or correct the path, with the case of the file name. (best practice)"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "kind": "best practice"
+              }
+            },
+            {
+              "id": "name-duplicate",
+              "name": "name-duplicate",
+              "shortDescription": {
+                "text": "two tokens share a name (compared without case and outer spaces), so a buyer cannot tell them apart by name"
+              },
+              "help": {
+                "text": "Give every token a name of its own, such as the name of the collection and the id. (best practice)"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "kind": "best practice"
+              }
+            },
+            {
+              "id": "attributes-duplicate",
+              "name": "attributes-duplicate",
+              "shortDescription": {
+                "text": "two tokens have the same set of attributes, which often means one token was made twice"
+              },
+              "help": {
+                "text": "Check the two tokens, and change or remove one when the copy is not meant. (best practice)"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "kind": "best practice"
+              }
+            },
+            {
+              "id": "attribute-value-empty",
+              "name": "attribute-value-empty",
+              "shortDescription": {
+                "text": "an attribute with a trait_type or a value that is empty or only spaces"
+              },
+              "help": {
+                "text": "Give the attribute a value, or leave it out of the token. (best practice)"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "kind": "best practice"
+              }
+            },
+            {
+              "id": "trait-type-inconsistent",
+              "name": "trait-type-inconsistent",
+              "shortDescription": {
+                "text": "across the collection, a trait whose values are of more than one type, such as 5 and \"5\", or trait types that differ only in case or separators, such as Background and background"
+              },
+              "help": {
+                "text": "Write each trait type the same way in every token, and its values as one type: text, or numbers. (best practice)"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "kind": "best practice"
+              }
+            }
+          ]
+        }
+      },
+      "artifacts": [
+        {
+          "location": {
+            "uri": "examples/bad/collection.json"
+          }
+        },
+        {
+          "location": {
+            "uri": "examples/bad/metadata/0000000000000000000000000000000000000000000000000000000000000001.json"
+          }
+        },
+        {
+          "location": {
+            "uri": "examples/bad/metadata/0000000000000000000000000000000000000000000000000000000000000003.json"
+          }
+        },
+        {
+          "location": {
+            "uri": "examples/bad/metadata/0000000000000000000000000000000000000000000000000000000000000004.json"
+          }
+        },
+        {
+          "location": {
+            "uri": "examples/bad/metadata/0000000000000000000000000000000000000000000000000000000000000005.json"
+          }
+        },
+        {
+          "location": {
+            "uri": "examples/bad/metadata/0000000000000000000000000000000000000000000000000000000000000006.json"
+          }
+        },
+        {
+          "location": {
+            "uri": "examples/bad/metadata/0000000000000000000000000000000000000000000000000000000000000007.json"
+          }
+        },
+        {
+          "location": {
+            "uri": "examples/bad/metadata/0000000000000000000000000000000000000000000000000000000000000009.json"
+          }
+        },
+        {
+          "location": {
+            "uri": "examples/bad/metadata/000000000000000000000000000000000000000000000000000000000000000d.json"
+          }
+        },
+        {
+          "location": {
+            "uri": "examples/bad/metadata/000000000000000000000000000000000000000000000000000000000000000f.json"
+          }
+        },
+        {
+          "location": {
+            "uri": "examples/bad/metadata/0x0C.json"
+          }
+        },
+        {
+          "location": {
+            "uri": "examples/bad/metadata/11.json"
+          }
+        },
+        {
+          "location": {
+            "uri": "examples/bad/metadata/0000000000000000000000000000000000000000000000000000000000000008.json"
+          }
+        },
+        {
+          "location": {
+            "uri": "examples/bad/metadata/token-sheet.json"
+          }
+        }
+      ],
+      "results": [
+        {
+          "ruleId": "id-missing",
+          "ruleIndex": 12,
+          "level": "error",
+          "message": {
+            "text": "Id 10 of the tokenIds (1 to 14) has no metadata file. Fix: Add the missing files, or narrow the range of the config to the ids that will be minted."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "examples/bad/collection.json",
+                  "index": 0
+                },
+                "region": {
+                  "startLine": 4,
+                  "startColumn": 3
+                }
+              }
+            }
+          ],
+          "properties": {
+            "kind": "best practice",
+            "subject": null
+          }
+        },
+        {
+          "ruleId": "id-missing",
+          "ruleIndex": 12,
+          "level": "error",
+          "message": {
+            "text": "Id 14 of the tokenIds (1 to 14) has no metadata file. Fix: Add the missing files, or narrow the range of the config to the ids that will be minted."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "examples/bad/collection.json",
+                  "index": 0
+                },
+                "region": {
+                  "startLine": 4,
+                  "startColumn": 3
+                }
+              }
+            }
+          ],
+          "properties": {
+            "kind": "best practice",
+            "subject": null
+          }
+        },
+        {
+          "ruleId": "uri-id-substitution",
+          "ruleIndex": 8,
+          "level": "error",
+          "message": {
+            "text": "The baseUri of the collection config holds \"{ID}\"; an ERC-1155 client replaces only the exact text {id}. Fix: Write the placeholder as {id}, in small letters with no space, and put it in the base URI where the id goes."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "examples/bad/collection.json",
+                  "index": 0
+                },
+                "region": {
+                  "startLine": 8,
+                  "startColumn": 14
+                }
+              }
+            }
+          ],
+          "properties": {
+            "kind": "documented",
+            "subject": null
+          }
+        },
+        {
+          "ruleId": "field-invalid",
+          "ruleIndex": 2,
+          "level": "error",
+          "message": {
+            "text": "The media of the collection config is the number 7; it must be text: the path of the media folder, relative to the folder of the config. Fix: Write the value as docs/inputs.md shows."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "examples/bad/collection.json",
+                  "index": 0
+                },
+                "region": {
+                  "startLine": 9,
+                  "startColumn": 3
+                }
+              }
+            }
+          ],
+          "properties": {
+            "kind": "input",
+            "subject": null
+          }
+        },
+        {
+          "ruleId": "id-duplicate",
+          "ruleIndex": 14,
+          "level": "error",
+          "message": {
+            "text": "The file 0000000000000000000000000000000000000000000000000000000000000001.json is for id 1, and so is 0000000000000000000000000000000000000000000000000000000000000001; which one a server gives for the token depends on the server. Fix: Keep one file for each id."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "examples/bad/metadata/0000000000000000000000000000000000000000000000000000000000000001.json",
+                  "index": 1
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1
+                }
+              }
+            }
+          ],
+          "properties": {
+            "kind": "best practice",
+            "subject": "1"
+          }
+        },
+        {
+          "ruleId": "media-missing",
+          "ruleIndex": 20,
+          "level": "error",
+          "message": {
+            "text": "The image of token 3 is the relative path \"{id}.png\", and the media folder examples/bad/metadata holds no file 0000000000000000000000000000000000000000000000000000000000000003.png. Fix: Add the file to the media folder, or correct the path, with the case of the file name."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "examples/bad/metadata/0000000000000000000000000000000000000000000000000000000000000003.json",
+                  "index": 2
+                },
+                "region": {
+                  "startLine": 4,
+                  "startColumn": 12
+                }
+              }
+            }
+          ],
+          "properties": {
+            "kind": "best practice",
+            "subject": "3"
+          }
+        },
+        {
+          "ruleId": "metadata-field-missing",
+          "ruleIndex": 4,
+          "level": "error",
+          "message": {
+            "text": "Token 4 has no image; the metadata schema of ERC-1155 defines image as a URI of an image of the asset, as text. Fix: Give every token a name and an image, as text."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "examples/bad/metadata/0000000000000000000000000000000000000000000000000000000000000004.json",
+                  "index": 3
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1
+                }
+              }
+            }
+          ],
+          "properties": {
+            "kind": "documented",
+            "subject": "4"
+          }
+        },
+        {
+          "ruleId": "field-type",
+          "ruleIndex": 6,
+          "level": "error",
+          "message": {
+            "text": "The name of token 5 is the number 5; the metadata schema of ERC-1155 defines it as text. Fix: Write the field in the type the standard gives it (docs/inputs.md)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "examples/bad/metadata/0000000000000000000000000000000000000000000000000000000000000005.json",
+                  "index": 4
+                },
+                "region": {
+                  "startLine": 2,
+                  "startColumn": 3
+                }
+              }
+            }
+          ],
+          "properties": {
+            "kind": "documented",
+            "subject": "5"
+          }
+        },
+        {
+          "ruleId": "field-type",
+          "ruleIndex": 6,
+          "level": "error",
+          "message": {
+            "text": "The decimals of token 5 is the number 1.5; the metadata schema of ERC-1155 defines it as a whole number of decimal places, written as a number. Fix: Write the field in the type the standard gives it (docs/inputs.md)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "examples/bad/metadata/0000000000000000000000000000000000000000000000000000000000000005.json",
+                  "index": 4
+                },
+                "region": {
+                  "startLine": 5,
+                  "startColumn": 3
+                }
+              }
+            }
+          ],
+          "properties": {
+            "kind": "documented",
+            "subject": "5"
+          }
+        },
+        {
+          "ruleId": "metadata-field-missing",
+          "ruleIndex": 4,
+          "level": "error",
+          "message": {
+            "text": "Token 6 has no image; the metadata schema of ERC-1155 defines image as a URI of an image of the asset, as text. Fix: Give every token a name and an image, as text."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "examples/bad/metadata/0000000000000000000000000000000000000000000000000000000000000006.json",
+                  "index": 5
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1
+                }
+              }
+            }
+          ],
+          "properties": {
+            "kind": "documented",
+            "subject": "6"
+          }
+        },
+        {
+          "ruleId": "uri-local-path",
+          "ruleIndex": 17,
+          "level": "error",
+          "message": {
+            "text": "The image of token 7, \"C:\\sprites\\7.png\", starts with a drive letter: a path on the machine that built the files, which no wallet can reach. Fix: Point at the uploaded file, or at a path inside the media folder that the upload tool replaces."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "examples/bad/metadata/0000000000000000000000000000000000000000000000000000000000000007.json",
+                  "index": 6
+                },
+                "region": {
+                  "startLine": 4,
+                  "startColumn": 12
+                }
+              }
+            }
+          ],
+          "properties": {
+            "kind": "best practice",
+            "subject": "7"
+          }
+        },
+        {
+          "ruleId": "attributes-invalid",
+          "ruleIndex": 9,
+          "level": "error",
+          "message": {
+            "text": "The attributes of token 7 are an object; the tool reads attributes as a list of objects, each with a trait_type and a value. Fix: Write attributes as a list such as [{\"trait_type\": \"Background\", \"value\": \"Blue\"}]."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "examples/bad/metadata/0000000000000000000000000000000000000000000000000000000000000007.json",
+                  "index": 6
+                },
+                "region": {
+                  "startLine": 7,
+                  "startColumn": 3
+                }
+              }
+            }
+          ],
+          "properties": {
+            "kind": "best practice",
+            "subject": "7"
+          }
+        },
+        {
+          "ruleId": "field-type",
+          "ruleIndex": 6,
+          "level": "error",
+          "message": {
+            "text": "The properties of token 9 is text; the metadata schema of ERC-1155 defines it as an object. Fix: Write the field in the type the standard gives it (docs/inputs.md)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "examples/bad/metadata/0000000000000000000000000000000000000000000000000000000000000009.json",
+                  "index": 7
+                },
+                "region": {
+                  "startLine": 6,
+                  "startColumn": 3
+                }
+              }
+            }
+          ],
+          "properties": {
+            "kind": "documented",
+            "subject": "9"
+          }
+        },
+        {
+          "ruleId": "secret-in-file",
+          "ruleIndex": 3,
+          "level": "error",
+          "message": {
+            "text": "The file holds the key \"mnemonic\", which names a seed, a mnemonic or a private key. The tool never reads one, and the value is not shown. Fix: Remove the value from the file and from wherever the file was copied, treat it as exposed and move what it controls to a new key. Metadata is public once it is uploaded."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "examples/bad/metadata/0000000000000000000000000000000000000000000000000000000000000009.json",
+                  "index": 7
+                },
+                "region": {
+                  "startLine": 17,
+                  "startColumn": 3
+                }
+              }
+            }
+          ],
+          "properties": {
+            "kind": "input",
+            "subject": null
+          }
+        },
+        {
+          "ruleId": "file-unreadable",
+          "ruleIndex": 0,
+          "level": "error",
+          "message": {
+            "text": "The metadata file is not JSON the reader can follow: expected a key in double quotes and found \",\" at line 5, column 17. Nothing in the file was checked. Fix: Write each file as one JSON object in UTF-8 (docs/inputs.md); fix the line named."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "examples/bad/metadata/000000000000000000000000000000000000000000000000000000000000000d.json",
+                  "index": 8
+                },
+                "region": {
+                  "startLine": 5,
+                  "startColumn": 17
+                }
+              }
+            }
+          ],
+          "properties": {
+            "kind": "input",
+            "subject": null
+          }
+        },
+        {
+          "ruleId": "id-out-of-range",
+          "ruleIndex": 11,
+          "level": "error",
+          "message": {
+            "text": "The file 000000000000000000000000000000000000000000000000000000000000000f.json is for id 15, outside the tokenIds of the collection config, 1 to 14. Fix: Remove the file, or correct its name or the range of the config."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "examples/bad/metadata/000000000000000000000000000000000000000000000000000000000000000f.json",
+                  "index": 9
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1
+                }
+              }
+            }
+          ],
+          "properties": {
+            "kind": "best practice",
+            "subject": "15"
+          }
+        },
+        {
+          "ruleId": "id-hex-form",
+          "ruleIndex": 7,
+          "level": "error",
+          "message": {
+            "text": "The file name \"0x0C.json\" starts with 0x and has hex digits in capitals and has 2 hex digits, not 64; an ERC-1155 client puts the id in place of {id} as 64 hex digits in small letters with no 0x, so for token 12 it asks for 000000000000000000000000000000000000000000000000000000000000000c.json. Fix: Name the file for its id as 64 small hex digits, such as 0000000000000000000000000000000000000000000000000000000000000001.json for id 1."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "examples/bad/metadata/0x0C.json",
+                  "index": 10
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1
+                }
+              }
+            }
+          ],
+          "properties": {
+            "kind": "documented",
+            "subject": "12"
+          }
+        },
+        {
+          "ruleId": "id-hex-form",
+          "ruleIndex": 7,
+          "level": "error",
+          "message": {
+            "text": "The file name \"11.json\" is written in decimal, and was read as the decimal id; an ERC-1155 client puts the id in place of {id} as 64 hex digits in small letters with no 0x, so for token 11 it asks for 000000000000000000000000000000000000000000000000000000000000000b.json. Fix: Name the file for its id as 64 small hex digits, such as 0000000000000000000000000000000000000000000000000000000000000001.json for id 1."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "examples/bad/metadata/11.json",
+                  "index": 11
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1
+                }
+              }
+            }
+          ],
+          "properties": {
+            "kind": "documented",
+            "subject": "11"
+          }
+        },
+        {
+          "ruleId": "uri-id-substitution",
+          "ruleIndex": 8,
+          "level": "error",
+          "message": {
+            "text": "The image of token 11 holds \"{tokenId}\"; an ERC-1155 client replaces only the exact text {id}, so the placeholder reaches the wallet as it is written. Fix: Write the placeholder as {id}, in small letters with no space, and put it in the base URI where the id goes."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "examples/bad/metadata/11.json",
+                  "index": 11
+                },
+                "region": {
+                  "startLine": 4,
+                  "startColumn": 12
+                }
+              }
+            }
+          ],
+          "properties": {
+            "kind": "documented",
+            "subject": "11"
+          }
+        },
+        {
+          "ruleId": "uri-mutable",
+          "ruleIndex": 16,
+          "level": "warning",
+          "message": {
+            "text": "The baseUri of the collection config is on https:, a web address whose server can change or remove the metadata after the mint. Fix: Upload the media and the metadata to a content address, such as ipfs:// or ar://, and point at that."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "examples/bad/collection.json",
+                  "index": 0
+                },
+                "region": {
+                  "startLine": 8,
+                  "startColumn": 14
+                }
+              }
+            }
+          ],
+          "properties": {
+            "kind": "best practice",
+            "subject": null
+          }
+        },
+        {
+          "ruleId": "field-unknown",
+          "ruleIndex": 1,
+          "level": "warning",
+          "message": {
+            "text": "The key \"mediaFolder\" of the collection config is not one the tool reads, so its value was left out of every check. Did you mean \"media\"? The keys of the collection config are standard, tokenIds, baseUri, media, notes. Fix: Write the key as the standard spells it (docs/inputs.md), or remove it."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "examples/bad/collection.json",
+                  "index": 0
+                },
+                "region": {
+                  "startLine": 10,
+                  "startColumn": 3
+                }
+              }
+            }
+          ],
+          "properties": {
+            "kind": "input",
+            "subject": null
+          }
+        },
+        {
+          "ruleId": "description-missing",
+          "ruleIndex": 5,
+          "level": "warning",
+          "message": {
+            "text": "The description of token 4 is empty; the metadata schema of ERC-1155 defines description as a description of the asset, as text. Fix: Give every token a description, as text."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "examples/bad/metadata/0000000000000000000000000000000000000000000000000000000000000004.json",
+                  "index": 3
+                },
+                "region": {
+                  "startLine": 3,
+                  "startColumn": 3
+                }
+              }
+            }
+          ],
+          "properties": {
+            "kind": "documented",
+            "subject": "4"
+          }
+        },
+        {
+          "ruleId": "attribute-value-empty",
+          "ruleIndex": 23,
+          "level": "warning",
+          "message": {
+            "text": "An attribute of token 4 has the trait_type \"Background\" with an empty value. Fix: Give the attribute a value, or leave it out of the token."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "examples/bad/metadata/0000000000000000000000000000000000000000000000000000000000000004.json",
+                  "index": 3
+                },
+                "region": {
+                  "startLine": 9,
+                  "startColumn": 7
+                }
+              }
+            }
+          ],
+          "properties": {
+            "kind": "best practice",
+            "subject": "4"
+          }
+        },
+        {
+          "ruleId": "uri-mutable",
+          "ruleIndex": 16,
+          "level": "warning",
+          "message": {
+            "text": "The image of token 5 is on http:, a web address whose server can change or remove the file after the mint, and that is not encrypted. Fix: Upload the media and the metadata to a content address, such as ipfs:// or ar://, and point at that."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "examples/bad/metadata/0000000000000000000000000000000000000000000000000000000000000005.json",
+                  "index": 4
+                },
+                "region": {
+                  "startLine": 4,
+                  "startColumn": 12
+                }
+              }
+            }
+          ],
+          "properties": {
+            "kind": "best practice",
+            "subject": "5"
+          }
+        },
+        {
+          "ruleId": "trait-type-inconsistent",
+          "ruleIndex": 24,
+          "level": "warning",
+          "message": {
+            "text": "The value of the trait \"Level\" of token 5 is text, but in 10 other attributes of the collection it is a number. Fix: Write each trait type the same way in every token, and its values as one type: text, or numbers."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "examples/bad/metadata/0000000000000000000000000000000000000000000000000000000000000005.json",
+                  "index": 4
+                },
+                "region": {
+                  "startLine": 14,
+                  "startColumn": 16
+                }
+              }
+            }
+          ],
+          "properties": {
+            "kind": "best practice",
+            "subject": "5"
+          }
+        },
+        {
+          "ruleId": "trait-type-inconsistent",
+          "ruleIndex": 24,
+          "level": "warning",
+          "message": {
+            "text": "The trait type \"background\" of token 6 differs only in case or separators from \"Background\", which 9 other attributes of the collection use; a marketplace shows them as two traits. Fix: Write each trait type the same way in every token, and its values as one type: text, or numbers."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "examples/bad/metadata/0000000000000000000000000000000000000000000000000000000000000006.json",
+                  "index": 5
+                },
+                "region": {
+                  "startLine": 8,
+                  "startColumn": 7
+                }
+              }
+            }
+          ],
+          "properties": {
+            "kind": "best practice",
+            "subject": "6"
+          }
+        },
+        {
+          "ruleId": "field-unknown",
+          "ruleIndex": 1,
+          "level": "warning",
+          "message": {
+            "text": "The key \"Image\" of the metadata of token 6 differs from image only in case or separators; the standard spells it image, so its value was left out of every check. Fix: Write the key as the standard spells it (docs/inputs.md), or remove it."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "examples/bad/metadata/0000000000000000000000000000000000000000000000000000000000000006.json",
+                  "index": 5
+                },
+                "region": {
+                  "startLine": 16,
+                  "startColumn": 3
+                }
+              }
+            }
+          ],
+          "properties": {
+            "kind": "input",
+            "subject": "6"
+          }
+        },
+        {
+          "ruleId": "name-duplicate",
+          "ruleIndex": 21,
+          "level": "warning",
+          "message": {
+            "text": "Token 8 has the name \"Example Sprite 1\", as token 1 (0000000000000000000000000000000000000000000000000000000000000001) does. Fix: Give every token a name of its own, such as the name of the collection and the id."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "examples/bad/metadata/0000000000000000000000000000000000000000000000000000000000000008.json",
+                  "index": 12
+                },
+                "region": {
+                  "startLine": 2,
+                  "startColumn": 11
+                }
+              }
+            }
+          ],
+          "properties": {
+            "kind": "best practice",
+            "subject": "8"
+          }
+        },
+        {
+          "ruleId": "attributes-duplicate",
+          "ruleIndex": 22,
+          "level": "warning",
+          "message": {
+            "text": "Token 8 has the same 2 attributes as token 1 (0000000000000000000000000000000000000000000000000000000000000001). Fix: Check the two tokens, and change or remove one when the copy is not meant."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "examples/bad/metadata/0000000000000000000000000000000000000000000000000000000000000008.json",
+                  "index": 12
+                },
+                "region": {
+                  "startLine": 7,
+                  "startColumn": 3
+                }
+              }
+            }
+          ],
+          "properties": {
+            "kind": "best practice",
+            "subject": "8"
+          }
+        },
+        {
+          "ruleId": "uri-scheme-unknown",
+          "ruleIndex": 18,
+          "level": "warning",
+          "message": {
+            "text": "The image of token 9 uses the scheme ftp:, which is not one the tool knows (ipfs:, ar:, https:, http:, data:). Fix: Use ipfs://, ar:// or https://, or check that the wallets and marketplaces of the collection read the scheme."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "examples/bad/metadata/0000000000000000000000000000000000000000000000000000000000000009.json",
+                  "index": 7
+                },
+                "region": {
+                  "startLine": 4,
+                  "startColumn": 12
+                }
+              }
+            }
+          ],
+          "properties": {
+            "kind": "best practice",
+            "subject": "9"
+          }
+        },
+        {
+          "ruleId": "file-name-unexpected",
+          "ruleIndex": 10,
+          "level": "warning",
+          "message": {
+            "text": "The file name \"token-sheet.json\" is not an id, so no token id leads to it; it was checked for its fields but not counted as a token. Fix: Name each file for its id as the base URI builds it, such as 1.json or 1, with .json in small letters."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "examples/bad/metadata/token-sheet.json",
+                  "index": 13
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1
+                }
+              }
+            }
+          ],
+          "properties": {
+            "kind": "best practice",
+            "subject": null
+          }
+        }
+      ],
+      "properties": {
+        "notice": "This report is an input to a review before the collection is minted: not a marketplace review, not a check of what is on IPFS or a chain and not a guarantee that a wallet or a marketplace will show the tokens.",
+        "result": "FAIL - 19 findings at or above error (19 error, 12 warning)",
+        "standard": "ERC-1155",
+        "sources": [
+          "https://eips.ethereum.org/EIPS/eip-721",
+          "https://eips.ethereum.org/EIPS/eip-1155",
+          "https://developers.metaplex.com/token-metadata/token-standard"
+        ]
+      }
+    }
+  ]
+}

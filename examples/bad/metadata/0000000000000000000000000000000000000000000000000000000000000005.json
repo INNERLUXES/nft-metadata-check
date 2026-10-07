@@ -1,0 +1,17 @@
+{
+  "name": 5,
+  "description": "Made-up token for the examples of nft-metadata-check; no real collection, artist or wallet.",
+  "image": "http://example.com/sprites/5.png",
+  "decimals": 1.5,
+  "properties": {},
+  "attributes": [
+    {
+      "trait_type": "Background",
+      "value": "Blue"
+    },
+    {
+      "trait_type": "Level",
+      "value": "5"
+    }
+  ]
+}

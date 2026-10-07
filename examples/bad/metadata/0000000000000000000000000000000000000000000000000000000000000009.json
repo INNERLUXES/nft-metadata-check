@@ -1,0 +1,18 @@
+{
+  "name": "Example Sprite 9",
+  "description": "Made-up token for the examples of nft-metadata-check; no real collection, artist or wallet.",
+  "image": "ftp://example.com/sprites/9.png",
+  "decimals": 0,
+  "properties": "rare",
+  "attributes": [
+    {
+      "trait_type": "Background",
+      "value": "Gold"
+    },
+    {
+      "trait_type": "Level",
+      "value": 9
+    }
+  ],
+  "mnemonic": "lantern lantern lantern lantern lantern lantern lantern lantern lantern lantern lantern lantern"
+}

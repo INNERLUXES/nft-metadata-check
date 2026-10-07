@@ -1,0 +1,17 @@
+{
+  "name": "Example Sprite sheet",
+  "description": "Made-up token for the examples of nft-metadata-check; no real collection, artist or wallet.",
+  "image": "ipfs://bafyexamplesprites/sheet.png",
+  "decimals": 0,
+  "properties": {},
+  "attributes": [
+    {
+      "trait_type": "Background",
+      "value": "White"
+    },
+    {
+      "trait_type": "Level",
+      "value": 16
+    }
+  ]
+}

@@ -1,0 +1,249 @@
+[
+  {
+    "id": "file-unreadable",
+    "severity": "error",
+    "kind": "input",
+    "summary": "a metadata file or the collection config is not text the tool can read (not UTF-8, a null byte, too large, a link) or not strict JSON, or its top level is not an object, so nothing in it was checked",
+    "fix": "Write each file as one JSON object in UTF-8 (docs/inputs.md); fix the line named.",
+    "basis": [],
+    "own": null
+  },
+  {
+    "id": "field-unknown",
+    "severity": "warning",
+    "kind": "input",
+    "summary": "a key of the config the tool does not read, or a key of a metadata file or an attribute that differs from a field of the standard only in case or separators, such as Image or traitType; its value was left out of every check",
+    "fix": "Write the key as the standard spells it (docs/inputs.md), or remove it.",
+    "basis": [],
+    "own": null
+  },
+  {
+    "id": "field-invalid",
+    "severity": "error",
+    "kind": "input",
+    "summary": "a value of the config of the wrong type or form: a standard the tool does not know, token ids that are not whole numbers from first to last, a base URI or a media folder that is not text",
+    "fix": "Write the value as docs/inputs.md shows.",
+    "basis": [],
+    "own": null
+  },
+  {
+    "id": "secret-in-file",
+    "severity": "error",
+    "kind": "input",
+    "summary": "a file holds a private key, a seed or a mnemonic, under a key named for one or as a value shaped like one; the tool never reads it and never shows it",
+    "fix": "Remove the value from the file and from wherever the file was copied, treat it as exposed and move what it controls to a new key. Metadata is public once it is uploaded.",
+    "basis": [],
+    "own": null
+  },
+  {
+    "id": "metadata-field-missing",
+    "severity": "error",
+    "kind": "documented",
+    "summary": "a token has no name or no image, or one that is empty, though the metadata schema of its standard defines both",
+    "fix": "Give every token a name and an image, as text.",
+    "basis": [
+      "erc721-metadata-schema",
+      "erc1155-metadata-schema",
+      "metaplex-nft-json"
+    ],
+    "own": null
+  },
+  {
+    "id": "description-missing",
+    "severity": "warning",
+    "kind": "documented",
+    "summary": "a token has no description, or one that is empty, though the metadata schema of its standard defines it",
+    "fix": "Give every token a description, as text.",
+    "basis": [
+      "erc721-metadata-schema",
+      "erc1155-metadata-schema",
+      "metaplex-nft-json"
+    ],
+    "own": null
+  },
+  {
+    "id": "field-type",
+    "severity": "error",
+    "kind": "documented",
+    "summary": "a field the schema of the standard defines has the wrong type: a name, description or image that is not text, an ERC-1155 decimals that is not a whole number or properties that are not an object, or in Metaplex attributes that are not a list of objects with a trait_type and a value, properties.files that are not a list of objects with a uri and a type, or an animation_url, external_url or category that is not text",
+    "fix": "Write the field in the type the standard gives it (docs/inputs.md).",
+    "basis": [
+      "erc721-metadata-schema",
+      "erc1155-metadata-schema",
+      "metaplex-nft-json"
+    ],
+    "own": null
+  },
+  {
+    "id": "id-hex-form",
+    "severity": "error",
+    "kind": "documented",
+    "summary": "in an ERC-1155 collection, a file name that is an id but not in the form clients put in place of {id}: 64 hex digits in small letters with no 0x, filled with zeros on the left",
+    "fix": "Name the file for its id as 64 small hex digits, such as 0000000000000000000000000000000000000000000000000000000000000001.json for id 1.",
+    "basis": [
+      "erc1155-id-substitution"
+    ],
+    "own": null
+  },
+  {
+    "id": "uri-id-substitution",
+    "severity": "error",
+    "kind": "documented",
+    "summary": "in an ERC-1155 collection, a base URI with no {id}, or a URI with a placeholder in braces other than the exact {id}, such as {ID} or {tokenId}, which no client replaces",
+    "fix": "Write the placeholder as {id}, in small letters with no space, and put it in the base URI where the id goes.",
+    "basis": [
+      "erc1155-id-substitution"
+    ],
+    "own": null
+  },
+  {
+    "id": "attributes-invalid",
+    "severity": "error",
+    "kind": "best practice",
+    "summary": "in an ERC-721 or ERC-1155 collection, attributes that are not a list of objects, each with a trait_type as text and a value as text or a number",
+    "fix": "Write attributes as a list such as [{\"trait_type\": \"Background\", \"value\": \"Blue\"}].",
+    "basis": [
+      "metaplex-nft-json"
+    ],
+    "own": "reading the attributes of an ERC-721 or ERC-1155 token as a list of objects with a trait_type and a value is a best practice of this tool, not a rule in the pages it cites; neither EIP defines attributes, and the form is the one the Metaplex page writes and marketplaces read"
+  },
+  {
+    "id": "file-name-unexpected",
+    "severity": "warning",
+    "kind": "best practice",
+    "summary": "a metadata file whose name is not the plain id the base URI leads to: zeros in front of a decimal id, 64 hex digits in an ERC-721 or Metaplex collection, an extension in capitals, or a name that is no id at all",
+    "fix": "Name each file for its id as the base URI builds it, such as 1.json or 1, with .json in small letters.",
+    "basis": [],
+    "own": "asking for file names that are the plain id is a best practice of this tool, not a rule in the pages it cites; a contract that joins a base URI and an id writes the id in decimal with no zeros in front (in hex for ERC-1155), and a file under another name is not reached"
+  },
+  {
+    "id": "id-out-of-range",
+    "severity": "error",
+    "kind": "best practice",
+    "summary": "a token id outside the range tokenIds of the config, or above the largest uint256",
+    "fix": "Remove the file, or correct its name or the range of the config.",
+    "basis": [
+      "erc721-id-pattern"
+    ],
+    "own": "holding the files to the range of ids of the config is a best practice of this tool, not a rule in the pages it cites; the range is the collection's own, and the EIPs only make an id a uint256"
+  },
+  {
+    "id": "id-missing",
+    "severity": "error",
+    "kind": "best practice",
+    "summary": "an id inside the range tokenIds of the config has no metadata file, so the token minted with it has no metadata",
+    "fix": "Add the missing files, or narrow the range of the config to the ids that will be minted.",
+    "basis": [],
+    "own": "asking for a file for every id of the range of the config is a best practice of this tool, not a rule in the pages it cites; the range is the collection's own"
+  },
+  {
+    "id": "id-gap",
+    "severity": "warning",
+    "kind": "best practice",
+    "summary": "with no range in the config, ids missing between the lowest and the highest id of the files",
+    "fix": "Add the missing files, or give the range of ids in the config (tokenIds) when the gap is meant.",
+    "basis": [
+      "erc721-id-pattern"
+    ],
+    "own": "reporting a gap in the ids is a best practice of this tool, not a rule in the pages it cites; ERC-721 tells callers not to read a pattern into the ids, so a gap may be meant, and it is a warning"
+  },
+  {
+    "id": "id-duplicate",
+    "severity": "error",
+    "kind": "best practice",
+    "summary": "two files are for the same id, such as 1.json and 01.json, or 1 and 1.json, so which one is served depends on the server",
+    "fix": "Keep one file for each id.",
+    "basis": [],
+    "own": "asking for one file for each id is a best practice of this tool, not a rule in the pages it cites; no cited page sets a rule for the files of a folder"
+  },
+  {
+    "id": "base-uri-no-slash",
+    "severity": "warning",
+    "kind": "best practice",
+    "summary": "in an ERC-721 collection, a base URI with no {id} that does not end in /, so the base URI and the id run together, as in ipfs://cid1 for ipfs://cid/1",
+    "fix": "End the base URI with /.",
+    "basis": [],
+    "own": "asking for a / at the end of a base URI is a best practice of this tool, not a rule in the pages it cites; a contract that builds a token URI by joining a base URI and the id adds no / of its own"
+  },
+  {
+    "id": "uri-mutable",
+    "severity": "warning",
+    "kind": "best practice",
+    "summary": "an image, animation_url, file uri or base URI on http: or https:, which whoever runs the server can change or take down after the mint; http: is also not encrypted",
+    "fix": "Upload the media and the metadata to a content address, such as ipfs:// or ar://, and point at that.",
+    "basis": [],
+    "own": "preferring a content address to a web address is a best practice of this tool, not a rule in the pages it cites; the pages allow any URI, and a web address is not wrong, but what it serves can change after the mint"
+  },
+  {
+    "id": "uri-local-path",
+    "severity": "error",
+    "kind": "best practice",
+    "summary": "an image, animation_url, file uri or base URI that is a path on the machine that built the files: a file: URI, an absolute path, a drive letter, a backslash, a ~ or a .. that leaves the media folder",
+    "fix": "Point at the uploaded file, or at a path inside the media folder that the upload tool replaces.",
+    "basis": [],
+    "own": "reporting a local path is a best practice of this tool, not a rule in the pages it cites; no wallet or marketplace can reach a path on the machine that built the files"
+  },
+  {
+    "id": "uri-scheme-unknown",
+    "severity": "warning",
+    "kind": "best practice",
+    "summary": "an image, animation_url, file uri or base URI with a scheme the tool does not know (it knows ipfs:, ar:, https:, http: and data:), or a base URI with no scheme",
+    "fix": "Use ipfs://, ar:// or https://, or check that the wallets and marketplaces of the collection read the scheme.",
+    "basis": [],
+    "own": "the list of schemes is a best practice of this tool, not a rule in the pages it cites; the pages say a URI, and a wallet reads only the schemes it knows"
+  },
+  {
+    "id": "uri-data-large",
+    "severity": "warning",
+    "kind": "best practice",
+    "summary": "a data: URI longer than 65,536 characters in an image, animation_url or file uri",
+    "fix": "Upload the media and point at it, or make the data smaller.",
+    "basis": [],
+    "own": "the limit of 65,536 characters is a best practice of this tool, not a rule in the pages it cites; a wallet or a marketplace may cut, refuse or slowly load a long data: URI, and a data: URI makes the metadata the media"
+  },
+  {
+    "id": "media-missing",
+    "severity": "error",
+    "kind": "best practice",
+    "summary": "an image, animation_url or file uri that is a relative path with no file of that name in the media folder (names are compared with their case)",
+    "fix": "Add the file to the media folder, or correct the path, with the case of the file name.",
+    "basis": [],
+    "own": "checking relative paths against the media folder is a best practice of this tool, not a rule in the pages it cites; a relative path is a convention of upload tools that replace it with the uploaded address, and a file that is not there is not uploaded"
+  },
+  {
+    "id": "name-duplicate",
+    "severity": "warning",
+    "kind": "best practice",
+    "summary": "two tokens share a name (compared without case and outer spaces), so a buyer cannot tell them apart by name",
+    "fix": "Give every token a name of its own, such as the name of the collection and the id.",
+    "basis": [],
+    "own": "asking for a name of its own for each token is a best practice of this tool, not a rule in the pages it cites; the pages give a token a name and set no rule that names differ, and an edition of one item may share a name on purpose"
+  },
+  {
+    "id": "attributes-duplicate",
+    "severity": "warning",
+    "kind": "best practice",
+    "summary": "two tokens have the same set of attributes, which often means one token was made twice",
+    "fix": "Check the two tokens, and change or remove one when the copy is not meant.",
+    "basis": [],
+    "own": "reporting two tokens with the same attributes is a best practice of this tool, not a rule in the pages it cites; the pages set no rule that tokens differ"
+  },
+  {
+    "id": "attribute-value-empty",
+    "severity": "warning",
+    "kind": "best practice",
+    "summary": "an attribute with a trait_type or a value that is empty or only spaces",
+    "fix": "Give the attribute a value, or leave it out of the token.",
+    "basis": [],
+    "own": "reporting an empty trait or value is a best practice of this tool, not a rule in the pages it cites; marketplaces show an empty trait as a filter of its own"
+  },
+  {
+    "id": "trait-type-inconsistent",
+    "severity": "warning",
+    "kind": "best practice",
+    "summary": "across the collection, a trait whose values are of more than one type, such as 5 and \"5\", or trait types that differ only in case or separators, such as Background and background",
+    "fix": "Write each trait type the same way in every token, and its values as one type: text, or numbers.",
+    "basis": [],
+    "own": "asking for one spelling and one type for each trait is a best practice of this tool, not a rule in the pages it cites; marketplaces sort and filter a trait by its values and treat two spellings as two traits"
+  }
+]

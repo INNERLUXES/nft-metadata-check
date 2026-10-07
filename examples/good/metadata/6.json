@@ -1,0 +1,25 @@
+{
+  "name": "Example Lantern 6",
+  "description": "Made-up token for the examples of nft-metadata-check; no real collection, artist or wallet.",
+  "image": "ipfs://bafyexamplegoodmeadowmedia/6.png",
+  "external_url": "https://example.com/lanterns/6",
+  "attributes": [
+    {
+      "trait_type": "Background",
+      "value": "Summit"
+    },
+    {
+      "trait_type": "Shape",
+      "value": "Square"
+    },
+    {
+      "trait_type": "Mood",
+      "value": "Bold"
+    },
+    {
+      "trait_type": "Glow",
+      "value": 60,
+      "display_type": "number"
+    }
+  ]
+}

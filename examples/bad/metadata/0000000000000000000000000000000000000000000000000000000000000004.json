@@ -1,0 +1,17 @@
+{
+  "name": "Example Sprite 4",
+  "description": "",
+  "decimals": 0,
+  "properties": {},
+  "attributes": [
+    {
+      "trait_type": "Background",
+      "value": ""
+    },
+    {
+      "trait_type": "Level",
+      "value": 4
+    }
+  ],
+  "notes": "Made-up token for the examples of nft-metadata-check; no real collection, artist or wallet."
+}

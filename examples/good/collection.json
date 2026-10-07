@@ -1,0 +1,10 @@
+{
+  "notes": "Made-up collection config for the examples of nft-metadata-check; no real collection, artist or wallet.",
+  "standard": "ERC-721",
+  "tokenIds": {
+    "first": 1,
+    "last": 6
+  },
+  "baseUri": "ipfs://bafyexamplegoodmeadowcollection/",
+  "media": "media"
+}

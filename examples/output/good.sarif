@@ -1,0 +1,429 @@
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "nft-metadata-check",
+          "version": "1.0.0",
+          "informationUri": "https://github.com/INNERLUXES/nft-metadata-check",
+          "rules": [
+            {
+              "id": "file-unreadable",
+              "name": "file-unreadable",
+              "shortDescription": {
+                "text": "a metadata file or the collection config is not text the tool can read (not UTF-8, a null byte, too large, a link) or not strict JSON, or its top level is not an object, so nothing in it was checked"
+              },
+              "help": {
+                "text": "Write each file as one JSON object in UTF-8 (docs/inputs.md); fix the line named. (input)"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "kind": "input"
+              }
+            },
+            {
+              "id": "field-unknown",
+              "name": "field-unknown",
+              "shortDescription": {
+                "text": "a key of the config the tool does not read, or a key of a metadata file or an attribute that differs from a field of the standard only in case or separators, such as Image or traitType; its value was left out of every check"
+              },
+              "help": {
+                "text": "Write the key as the standard spells it (docs/inputs.md), or remove it. (input)"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "kind": "input"
+              }
+            },
+            {
+              "id": "field-invalid",
+              "name": "field-invalid",
+              "shortDescription": {
+                "text": "a value of the config of the wrong type or form: a standard the tool does not know, token ids that are not whole numbers from first to last, a base URI or a media folder that is not text"
+              },
+              "help": {
+                "text": "Write the value as docs/inputs.md shows. (input)"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "kind": "input"
+              }
+            },
+            {
+              "id": "secret-in-file",
+              "name": "secret-in-file",
+              "shortDescription": {
+                "text": "a file holds a private key, a seed or a mnemonic, under a key named for one or as a value shaped like one; the tool never reads it and never shows it"
+              },
+              "help": {
+                "text": "Remove the value from the file and from wherever the file was copied, treat it as exposed and move what it controls to a new key. Metadata is public once it is uploaded. (input)"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "kind": "input"
+              }
+            },
+            {
+              "id": "metadata-field-missing",
+              "name": "metadata-field-missing",
+              "shortDescription": {
+                "text": "a token has no name or no image, or one that is empty, though the metadata schema of its standard defines both"
+              },
+              "help": {
+                "text": "Give every token a name and an image, as text. (documented)"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "kind": "documented"
+              }
+            },
+            {
+              "id": "description-missing",
+              "name": "description-missing",
+              "shortDescription": {
+                "text": "a token has no description, or one that is empty, though the metadata schema of its standard defines it"
+              },
+              "help": {
+                "text": "Give every token a description, as text. (documented)"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "kind": "documented"
+              }
+            },
+            {
+              "id": "field-type",
+              "name": "field-type",
+              "shortDescription": {
+                "text": "a field the schema of the standard defines has the wrong type: a name, description or image that is not text, an ERC-1155 decimals that is not a whole number or properties that are not an object, or in Metaplex attributes that are not a list of objects with a trait_type and a value, properties.files that are not a list of objects with a uri and a type, or an animation_url, external_url or category that is not text"
+              },
+              "help": {
+                "text": "Write the field in the type the standard gives it (docs/inputs.md). (documented)"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "kind": "documented"
+              }
+            },
+            {
+              "id": "id-hex-form",
+              "name": "id-hex-form",
+              "shortDescription": {
+                "text": "in an ERC-1155 collection, a file name that is an id but not in the form clients put in place of {id}: 64 hex digits in small letters with no 0x, filled with zeros on the left"
+              },
+              "help": {
+                "text": "Name the file for its id as 64 small hex digits, such as 0000000000000000000000000000000000000000000000000000000000000001.json for id 1. (documented)"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "kind": "documented"
+              }
+            },
+            {
+              "id": "uri-id-substitution",
+              "name": "uri-id-substitution",
+              "shortDescription": {
+                "text": "in an ERC-1155 collection, a base URI with no {id}, or a URI with a placeholder in braces other than the exact {id}, such as {ID} or {tokenId}, which no client replaces"
+              },
+              "help": {
+                "text": "Write the placeholder as {id}, in small letters with no space, and put it in the base URI where the id goes. (documented)"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "kind": "documented"
+              }
+            },
+            {
+              "id": "attributes-invalid",
+              "name": "attributes-invalid",
+              "shortDescription": {
+                "text": "in an ERC-721 or ERC-1155 collection, attributes that are not a list of objects, each with a trait_type as text and a value as text or a number"
+              },
+              "help": {
+                "text": "Write attributes as a list such as [{\"trait_type\": \"Background\", \"value\": \"Blue\"}]. (best practice)"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "kind": "best practice"
+              }
+            },
+            {
+              "id": "file-name-unexpected",
+              "name": "file-name-unexpected",
+              "shortDescription": {
+                "text": "a metadata file whose name is not the plain id the base URI leads to: zeros in front of a decimal id, 64 hex digits in an ERC-721 or Metaplex collection, an extension in capitals, or a name that is no id at all"
+              },
+              "help": {
+                "text": "Name each file for its id as the base URI builds it, such as 1.json or 1, with .json in small letters. (best practice)"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "kind": "best practice"
+              }
+            },
+            {
+              "id": "id-out-of-range",
+              "name": "id-out-of-range",
+              "shortDescription": {
+                "text": "a token id outside the range tokenIds of the config, or above the largest uint256"
+              },
+              "help": {
+                "text": "Remove the file, or correct its name or the range of the config. (best practice)"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "kind": "best practice"
+              }
+            },
+            {
+              "id": "id-missing",
+              "name": "id-missing",
+              "shortDescription": {
+                "text": "an id inside the range tokenIds of the config has no metadata file, so the token minted with it has no metadata"
+              },
+              "help": {
+                "text": "Add the missing files, or narrow the range of the config to the ids that will be minted. (best practice)"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "kind": "best practice"
+              }
+            },
+            {
+              "id": "id-gap",
+              "name": "id-gap",
+              "shortDescription": {
+                "text": "with no range in the config, ids missing between the lowest and the highest id of the files"
+              },
+              "help": {
+                "text": "Add the missing files, or give the range of ids in the config (tokenIds) when the gap is meant. (best practice)"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "kind": "best practice"
+              }
+            },
+            {
+              "id": "id-duplicate",
+              "name": "id-duplicate",
+              "shortDescription": {
+                "text": "two files are for the same id, such as 1.json and 01.json, or 1 and 1.json, so which one is served depends on the server"
+              },
+              "help": {
+                "text": "Keep one file for each id. (best practice)"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "kind": "best practice"
+              }
+            },
+            {
+              "id": "base-uri-no-slash",
+              "name": "base-uri-no-slash",
+              "shortDescription": {
+                "text": "in an ERC-721 collection, a base URI with no {id} that does not end in /, so the base URI and the id run together, as in ipfs://cid1 for ipfs://cid/1"
+              },
+              "help": {
+                "text": "End the base URI with /. (best practice)"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "kind": "best practice"
+              }
+            },
+            {
+              "id": "uri-mutable",
+              "name": "uri-mutable",
+              "shortDescription": {
+                "text": "an image, animation_url, file uri or base URI on http: or https:, which whoever runs the server can change or take down after the mint; http: is also not encrypted"
+              },
+              "help": {
+                "text": "Upload the media and the metadata to a content address, such as ipfs:// or ar://, and point at that. (best practice)"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "kind": "best practice"
+              }
+            },
+            {
+              "id": "uri-local-path",
+              "name": "uri-local-path",
+              "shortDescription": {
+                "text": "an image, animation_url, file uri or base URI that is a path on the machine that built the files: a file: URI, an absolute path, a drive letter, a backslash, a ~ or a .. that leaves the media folder"
+              },
+              "help": {
+                "text": "Point at the uploaded file, or at a path inside the media folder that the upload tool replaces. (best practice)"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "kind": "best practice"
+              }
+            },
+            {
+              "id": "uri-scheme-unknown",
+              "name": "uri-scheme-unknown",
+              "shortDescription": {
+                "text": "an image, animation_url, file uri or base URI with a scheme the tool does not know (it knows ipfs:, ar:, https:, http: and data:), or a base URI with no scheme"
+              },
+              "help": {
+                "text": "Use ipfs://, ar:// or https://, or check that the wallets and marketplaces of the collection read the scheme. (best practice)"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "kind": "best practice"
+              }
+            },
+            {
+              "id": "uri-data-large",
+              "name": "uri-data-large",
+              "shortDescription": {
+                "text": "a data: URI longer than 65,536 characters in an image, animation_url or file uri"
+              },
+              "help": {
+                "text": "Upload the media and point at it, or make the data smaller. (best practice)"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "kind": "best practice"
+              }
+            },
+            {
+              "id": "media-missing",
+              "name": "media-missing",
+              "shortDescription": {
+                "text": "an image, animation_url or file uri that is a relative path with no file of that name in the media folder (names are compared with their case)"
+              },
+              "help": {
+                "text": "Add the file to the media folder, or correct the path, with the case of the file name. (best practice)"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "kind": "best practice"
+              }
+            },
+            {
+              "id": "name-duplicate",
+              "name": "name-duplicate",
+              "shortDescription": {
+                "text": "two tokens share a name (compared without case and outer spaces), so a buyer cannot tell them apart by name"
+              },
+              "help": {
+                "text": "Give every token a name of its own, such as the name of the collection and the id. (best practice)"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "kind": "best practice"
+              }
+            },
+            {
+              "id": "attributes-duplicate",
+              "name": "attributes-duplicate",
+              "shortDescription": {
+                "text": "two tokens have the same set of attributes, which often means one token was made twice"
+              },
+              "help": {
+                "text": "Check the two tokens, and change or remove one when the copy is not meant. (best practice)"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "kind": "best practice"
+              }
+            },
+            {
+              "id": "attribute-value-empty",
+              "name": "attribute-value-empty",
+              "shortDescription": {
+                "text": "an attribute with a trait_type or a value that is empty or only spaces"
+              },
+              "help": {
+                "text": "Give the attribute a value, or leave it out of the token. (best practice)"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "kind": "best practice"
+              }
+            },
+            {
+              "id": "trait-type-inconsistent",
+              "name": "trait-type-inconsistent",
+              "shortDescription": {
+                "text": "across the collection, a trait whose values are of more than one type, such as 5 and \"5\", or trait types that differ only in case or separators, such as Background and background"
+              },
+              "help": {
+                "text": "Write each trait type the same way in every token, and its values as one type: text, or numbers. (best practice)"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "kind": "best practice"
+              }
+            }
+          ]
+        }
+      },
+      "artifacts": [],
+      "results": [],
+      "properties": {
+        "notice": "This report is an input to a review before the collection is minted: not a marketplace review, not a check of what is on IPFS or a chain and not a guarantee that a wallet or a marketplace will show the tokens.",
+        "result": "PASS - no finding at or above error",
+        "standard": "ERC-721",
+        "sources": [
+          "https://eips.ethereum.org/EIPS/eip-721",
+          "https://eips.ethereum.org/EIPS/eip-1155",
+          "https://developers.metaplex.com/token-metadata/token-standard"
+        ]
+      }
+    }
+  ]
+}

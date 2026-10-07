@@ -1,0 +1,241 @@
+{
+  "tool": "nft-metadata-check",
+  "version": "1.0.0",
+  "inputs": {
+    "folder": "examples/good/metadata",
+    "files": 6,
+    "bytes": 3245,
+    "other": 0,
+    "config": {
+      "file": "examples/good/collection.json",
+      "bytes": 273,
+      "lines": 10
+    },
+    "media": {
+      "folder": "examples/good/media",
+      "files": 6,
+      "same": false
+    }
+  },
+  "standard": {
+    "name": "ERC-721",
+    "from": "config"
+  },
+  "summary": {
+    "files": 6,
+    "tokens": 6,
+    "lowest": "1",
+    "highest": "6",
+    "range": {
+      "first": "1",
+      "last": "6"
+    }
+  },
+  "totals": {
+    "findings": 0,
+    "byLevel": {
+      "error": 0,
+      "warning": 0,
+      "info": 0
+    },
+    "hidden": 0
+  },
+  "rules": [
+    {
+      "id": "file-unreadable",
+      "level": "error",
+      "kind": "input",
+      "findings": 0
+    },
+    {
+      "id": "field-unknown",
+      "level": "warning",
+      "kind": "input",
+      "findings": 0
+    },
+    {
+      "id": "field-invalid",
+      "level": "error",
+      "kind": "input",
+      "findings": 0
+    },
+    {
+      "id": "secret-in-file",
+      "level": "error",
+      "kind": "input",
+      "findings": 0
+    },
+    {
+      "id": "metadata-field-missing",
+      "level": "error",
+      "kind": "documented",
+      "findings": 0
+    },
+    {
+      "id": "description-missing",
+      "level": "warning",
+      "kind": "documented",
+      "findings": 0
+    },
+    {
+      "id": "field-type",
+      "level": "error",
+      "kind": "documented",
+      "findings": 0
+    },
+    {
+      "id": "id-hex-form",
+      "level": "error",
+      "kind": "documented",
+      "findings": 0
+    },
+    {
+      "id": "uri-id-substitution",
+      "level": "error",
+      "kind": "documented",
+      "findings": 0
+    },
+    {
+      "id": "attributes-invalid",
+      "level": "error",
+      "kind": "best practice",
+      "findings": 0
+    },
+    {
+      "id": "file-name-unexpected",
+      "level": "warning",
+      "kind": "best practice",
+      "findings": 0
+    },
+    {
+      "id": "id-out-of-range",
+      "level": "error",
+      "kind": "best practice",
+      "findings": 0
+    },
+    {
+      "id": "id-missing",
+      "level": "error",
+      "kind": "best practice",
+      "findings": 0
+    },
+    {
+      "id": "id-gap",
+      "level": "warning",
+      "kind": "best practice",
+      "findings": 0
+    },
+    {
+      "id": "id-duplicate",
+      "level": "error",
+      "kind": "best practice",
+      "findings": 0
+    },
+    {
+      "id": "base-uri-no-slash",
+      "level": "warning",
+      "kind": "best practice",
+      "findings": 0
+    },
+    {
+      "id": "uri-mutable",
+      "level": "warning",
+      "kind": "best practice",
+      "findings": 0
+    },
+    {
+      "id": "uri-local-path",
+      "level": "error",
+      "kind": "best practice",
+      "findings": 0
+    },
+    {
+      "id": "uri-scheme-unknown",
+      "level": "warning",
+      "kind": "best practice",
+      "findings": 0
+    },
+    {
+      "id": "uri-data-large",
+      "level": "warning",
+      "kind": "best practice",
+      "findings": 0
+    },
+    {
+      "id": "media-missing",
+      "level": "error",
+      "kind": "best practice",
+      "findings": 0
+    },
+    {
+      "id": "name-duplicate",
+      "level": "warning",
+      "kind": "best practice",
+      "findings": 0
+    },
+    {
+      "id": "attributes-duplicate",
+      "level": "warning",
+      "kind": "best practice",
+      "findings": 0
+    },
+    {
+      "id": "attribute-value-empty",
+      "level": "warning",
+      "kind": "best practice",
+      "findings": 0
+    },
+    {
+      "id": "trait-type-inconsistent",
+      "level": "warning",
+      "kind": "best practice",
+      "findings": 0
+    }
+  ],
+  "config": {
+    "minSeverity": "info",
+    "failOn": "error"
+  },
+  "findings": [],
+  "traits": [
+    {
+      "trait": "Background",
+      "tokens": 6,
+      "values": 3,
+      "types": [
+        "text"
+      ]
+    },
+    {
+      "trait": "Glow",
+      "tokens": 6,
+      "values": 6,
+      "types": [
+        "number"
+      ]
+    },
+    {
+      "trait": "Mood",
+      "tokens": 6,
+      "values": 2,
+      "types": [
+        "text"
+      ]
+    },
+    {
+      "trait": "Shape",
+      "tokens": 6,
+      "values": 2,
+      "types": [
+        "text"
+      ]
+    }
+  ],
+  "notes": [],
+  "notice": "This report is an input to a review before the collection is minted: not a marketplace review, not a check of what is on IPFS or a chain and not a guarantee that a wallet or a marketplace will show the tokens.",
+  "result": {
+    "pass": true,
+    "failOn": "error",
+    "text": "PASS - no finding at or above error"
+  }
+}

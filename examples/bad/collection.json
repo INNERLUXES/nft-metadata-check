@@ -1,0 +1,11 @@
+{
+  "notes": "Made-up collection config for the examples of nft-metadata-check; no real collection, artist or wallet.",
+  "standard": "ERC-1155",
+  "tokenIds": {
+    "first": 1,
+    "last": 14
+  },
+  "baseUri": "https://example.com/sprites/{ID}.json",
+  "media": 7,
+  "mediaFolder": "media"
+}

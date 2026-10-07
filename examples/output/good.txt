@@ -1,0 +1,52 @@
+nft-metadata-check: examples/good/metadata
+files: 6 metadata files (JSON, 3,245 bytes)
+config: examples/good/collection.json (JSON, 10 lines, 273 bytes)
+media: examples/good/media (6 files)
+standard: ERC-721, from the config
+tokens: 6 ids, from 1 to 6; the config expects 1 to 6
+findings: 0
+
+Checks (25)
+
+  check                    level    kind           findings
+  file-unreadable          error    input          0
+  field-unknown            warning  input          0
+  field-invalid            error    input          0
+  secret-in-file           error    input          0
+  metadata-field-missing   error    documented     0
+  description-missing      warning  documented     0
+  field-type               error    documented     0
+  id-hex-form              error    documented     0
+  uri-id-substitution      error    documented     0
+  attributes-invalid       error    best practice  0
+  file-name-unexpected     warning  best practice  0
+  id-out-of-range          error    best practice  0
+  id-missing               error    best practice  0
+  id-gap                   warning  best practice  0
+  id-duplicate             error    best practice  0
+  base-uri-no-slash        warning  best practice  0
+  uri-mutable              warning  best practice  0
+  uri-local-path           error    best practice  0
+  uri-scheme-unknown       warning  best practice  0
+  uri-data-large           warning  best practice  0
+  media-missing            error    best practice  0
+  name-duplicate           warning  best practice  0
+  attributes-duplicate     warning  best practice  0
+  attribute-value-empty    warning  best practice  0
+  trait-type-inconsistent  warning  best practice  0
+
+Findings (0)
+
+  none
+
+Traits (4)
+
+  trait type  tokens  values  types
+  Background  6       3       text
+  Glow        6       6       number
+  Mood        6       2       text
+  Shape       6       2       text
+
+This report is an input to a review before the collection is minted: not a marketplace review, not a check of what is on IPFS or a chain and not a guarantee that a wallet or a marketplace will show the tokens.
+
+RESULT: PASS - no finding at or above error

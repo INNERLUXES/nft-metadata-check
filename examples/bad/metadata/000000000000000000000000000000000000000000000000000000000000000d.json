@@ -1,0 +1,17 @@
+{
+  "name": "Example Sprite 13",
+  "description": "Made-up token for the examples of nft-metadata-check; no real collection, artist or wallet.",
+  "image": "ipfs://bafyexamplesprites/13.png",
+  "decimals": 0,,
+  "properties": {},
+  "attributes": [
+    {
+      "trait_type": "Background",
+      "value": "Teal"
+    },
+    {
+      "trait_type": "Level",
+      "value": 13
+    }
+  ]
+}

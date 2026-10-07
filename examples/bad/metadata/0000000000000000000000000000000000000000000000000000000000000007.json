@@ -1,0 +1,11 @@
+{
+  "name": "Example Sprite 7",
+  "description": "Made-up token for the examples of nft-metadata-check; no real collection, artist or wallet.",
+  "image": "C:\\sprites\\7.png",
+  "decimals": 0,
+  "properties": {},
+  "attributes": {
+    "Background": "Blue",
+    "Level": 7
+  }
+}

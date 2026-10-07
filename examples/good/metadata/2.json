@@ -1,0 +1,25 @@
+{
+  "name": "Example Lantern 2",
+  "description": "Made-up token for the examples of nft-metadata-check; no real collection, artist or wallet.",
+  "image": "2.png",
+  "external_url": "https://example.com/lanterns/2",
+  "attributes": [
+    {
+      "trait_type": "Background",
+      "value": "Meadow"
+    },
+    {
+      "trait_type": "Shape",
+      "value": "Square"
+    },
+    {
+      "trait_type": "Mood",
+      "value": "Bold"
+    },
+    {
+      "trait_type": "Glow",
+      "value": 20,
+      "display_type": "number"
+    }
+  ]
+}

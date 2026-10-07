@@ -1,0 +1,29 @@
+nft-metadata-check checks
+
+  file-unreadable          error    input          a metadata file or the collection config is not text the tool can read (not UTF-8, a null byte, too large, a link) or not strict JSON, or its top level is not an object, so nothing in it was checked
+  field-unknown            warning  input          a key of the config the tool does not read, or a key of a metadata file or an attribute that differs from a field of the standard only in case or separators, such as Image or traitType; its value was left out of every check
+  field-invalid            error    input          a value of the config of the wrong type or form: a standard the tool does not know, token ids that are not whole numbers from first to last, a base URI or a media folder that is not text
+  secret-in-file           error    input          a file holds a private key, a seed or a mnemonic, under a key named for one or as a value shaped like one; the tool never reads it and never shows it
+  metadata-field-missing   error    documented     a token has no name or no image, or one that is empty, though the metadata schema of its standard defines both
+  description-missing      warning  documented     a token has no description, or one that is empty, though the metadata schema of its standard defines it
+  field-type               error    documented     a field the schema of the standard defines has the wrong type: a name, description or image that is not text, an ERC-1155 decimals that is not a whole number or properties that are not an object, or in Metaplex attributes that are not a list of objects with a trait_type and a value, properties.files that are not a list of objects with a uri and a type, or an animation_url, external_url or category that is not text
+  id-hex-form              error    documented     in an ERC-1155 collection, a file name that is an id but not in the form clients put in place of {id}: 64 hex digits in small letters with no 0x, filled with zeros on the left
+  uri-id-substitution      error    documented     in an ERC-1155 collection, a base URI with no {id}, or a URI with a placeholder in braces other than the exact {id}, such as {ID} or {tokenId}, which no client replaces
+  attributes-invalid       error    best practice  in an ERC-721 or ERC-1155 collection, attributes that are not a list of objects, each with a trait_type as text and a value as text or a number
+  file-name-unexpected     warning  best practice  a metadata file whose name is not the plain id the base URI leads to: zeros in front of a decimal id, 64 hex digits in an ERC-721 or Metaplex collection, an extension in capitals, or a name that is no id at all
+  id-out-of-range          error    best practice  a token id outside the range tokenIds of the config, or above the largest uint256
+  id-missing               error    best practice  an id inside the range tokenIds of the config has no metadata file, so the token minted with it has no metadata
+  id-gap                   warning  best practice  with no range in the config, ids missing between the lowest and the highest id of the files
+  id-duplicate             error    best practice  two files are for the same id, such as 1.json and 01.json, or 1 and 1.json, so which one is served depends on the server
+  base-uri-no-slash        warning  best practice  in an ERC-721 collection, a base URI with no {id} that does not end in /, so the base URI and the id run together, as in ipfs://cid1 for ipfs://cid/1
+  uri-mutable              warning  best practice  an image, animation_url, file uri or base URI on http: or https:, which whoever runs the server can change or take down after the mint; http: is also not encrypted
+  uri-local-path           error    best practice  an image, animation_url, file uri or base URI that is a path on the machine that built the files: a file: URI, an absolute path, a drive letter, a backslash, a ~ or a .. that leaves the media folder
+  uri-scheme-unknown       warning  best practice  an image, animation_url, file uri or base URI with a scheme the tool does not know (it knows ipfs:, ar:, https:, http: and data:), or a base URI with no scheme
+  uri-data-large           warning  best practice  a data: URI longer than 65,536 characters in an image, animation_url or file uri
+  media-missing            error    best practice  an image, animation_url or file uri that is a relative path with no file of that name in the media folder (names are compared with their case)
+  name-duplicate           warning  best practice  two tokens share a name (compared without case and outer spaces), so a buyer cannot tell them apart by name
+  attributes-duplicate     warning  best practice  two tokens have the same set of attributes, which often means one token was made twice
+  attribute-value-empty    warning  best practice  an attribute with a trait_type or a value that is empty or only spaces
+  trait-type-inconsistent  warning  best practice  across the collection, a trait whose values are of more than one type, such as 5 and "5", or trait types that differ only in case or separators, such as Background and background
+
+A documented check rests on ERC-721, ERC-1155 and the Token Metadata standard of Metaplex; a best practice check is this tool's own choice and says so in its message. An input check is about one of the files itself.
